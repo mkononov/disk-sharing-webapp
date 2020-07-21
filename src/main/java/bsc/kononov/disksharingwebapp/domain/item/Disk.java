@@ -84,4 +84,13 @@ public class Disk implements Serializable {
 
         return Objects.hash(id, owner, holder, description);
     }
+
+    @Override
+    public String toString() {
+        return "Disk{" +
+                "id=" + id +
+                ", owner=" + owner +
+                ", holder=" + holder +
+                '}';
+    }
 }

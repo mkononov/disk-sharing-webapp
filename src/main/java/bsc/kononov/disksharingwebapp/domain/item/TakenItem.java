@@ -117,4 +117,15 @@ public class TakenItem implements Serializable {
 
         return Objects.hash(id, disk, from, to, opType, opDate);
     }
+
+    @Override
+    public String toString() {
+        return "TakenItem{" +
+                "id=" + id +
+                ", disk=" + disk +
+                ", from=" + from +
+                ", to=" + to +
+                ", opType=" + opType +
+                '}';
+    }
 }

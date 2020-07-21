@@ -66,4 +66,12 @@ public class Reference implements Serializable {
 
         return Objects.hash(id, name, referenceValues);
     }
+
+    @Override
+    public String toString() {
+        return "Reference{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

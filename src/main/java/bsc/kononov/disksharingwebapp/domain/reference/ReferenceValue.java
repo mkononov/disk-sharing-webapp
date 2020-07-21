@@ -66,4 +66,13 @@ public class ReferenceValue implements Serializable {
 
         return Objects.hash(id, reference, value);
     }
+
+    @Override
+    public String toString() {
+        return "ReferenceValue{" +
+                "id=" + id +
+                ", reference=" + reference +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }

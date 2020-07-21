@@ -107,4 +107,14 @@ public class User implements Serializable {
 
         return Objects.hash(id, username, password, firstName, lastName, disks);
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
 }
