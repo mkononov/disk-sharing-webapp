@@ -1,6 +1,6 @@
 package bsc.kononov.disksharingwebapp.rest;
 
-import bsc.kononov.disksharingwebapp.security.JwtManager;
+import bsc.kononov.disksharingwebapp.domain.user.User;
 import bsc.kononov.disksharingwebapp.service.DiskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,15 +13,11 @@ import java.util.Map;
 @RequestMapping("/api/disks")
 public class DiskController {
 
-    private static final String CONTACT_SUPPORT = "An error has occurred. Try to contact with support";
-
     private final DiskService diskService;
-    private final JwtManager jwtManager;
 
     @Autowired
-    public DiskController(DiskService diskService, JwtManager jwtManager) {
+    public DiskController(DiskService diskService) {
         this.diskService = diskService;
-        this.jwtManager = jwtManager;
     }
 
     // Список собственных дисков у каждого пользователя
@@ -39,42 +35,36 @@ public class DiskController {
     // Список дисков, взятых пользователем
     @GetMapping("/taken")
     public Map<String, Object> takenByUser(HttpServletRequest request) {
-        String authUsername = getAuthUsername(request);
+        User authUser = getAuthUser(request);
 
-        return diskService.findTakenByUsername(authUsername);
+        return diskService.findTakenByUsername(authUser.getUsername());
     }
 
     // Список дисков, взятых у пользователя (с указанием, кто взял)
     @GetMapping("/dropped")
     public Map<String, Object> droppedByUser(HttpServletRequest request) {
-        String authUsername = getAuthUsername(request);
+        User authUser = getAuthUser(request);
 
-        return diskService.findTakenFromUsername(authUsername);
+        return diskService.findTakenFromUsername(authUser.getUsername());
     }
 
     // Взять диск
     @PostMapping("/take/{diskId}")
     public String takeDisk(HttpServletRequest request, @PathVariable Long diskId) {
-        String authUsername = getAuthUsername(request);
+        User authUser = getAuthUser(request);
 
-        if (!authUsername.isEmpty())
-            return diskService.takeDisk(authUsername, diskId);
-        else
-            return CONTACT_SUPPORT;
+        return diskService.takeDisk(authUser.getUsername(), diskId);
     }
 
     // Отдать диск
     @PostMapping("/return/{diskId}")
     public String returnDisk(HttpServletRequest request, @PathVariable Long diskId) {
-        String authUsername = getAuthUsername(request);
+        User authUser = getAuthUser(request);
 
-        if (!authUsername.isEmpty())
-            return diskService.returnDisk(authUsername, diskId);
-        else
-            return CONTACT_SUPPORT;
+        return diskService.returnDisk(authUser.getUsername(), diskId);
     }
 
-    private String getAuthUsername(HttpServletRequest request) {
-        return jwtManager.getUsernameFromHeader(request.getHeader("Authorization"));
+    private User getAuthUser(HttpServletRequest request) {
+        return (User) request.getAttribute("authUser");
     }
 }
